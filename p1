@@ -1,0 +1,97 @@
+public class Student implements Cloneable{
+
+	@Override
+	public String toString() {
+		return "Student [name=" + name + ", id=" + id + ", gpa=" + gpa + "]";
+	}
+
+	private String name;
+	private int id;
+	private double gpa;
+
+	public Student(String name, int id, double gpa) {
+		super();
+		this.name = name;
+		this.id = id;
+		this.gpa = gpa;
+	}
+	
+	public Student(Student student) {
+		this.name = student.getName();
+		this.id = student.getId();
+		this.gpa = student.getGpa();
+	}
+	
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public double getGpa() {
+		return gpa;
+	}
+
+	public void setGpa(double gpa) {
+		this.gpa = gpa;
+	}
+
+	public Student deepCopy() throws CloneNotSupportedException{
+		Student deepClone = (Student) super.clone();
+		deepClone.name = name;
+		deepClone.id = id;
+		deepClone.gpa = gpa;
+		return deepClone;
+	}
+	
+	public Student shallowCopy() throws CloneNotSupportedException{
+		Student clone = (Student) super.clone();
+		
+		return clone;
+	}
+	
+	public boolean equals(Student student){
+		if(name.equals(student.getName())){
+			if(id == student.getId()){
+				if(gpa == student.getGpa()){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+}
+
+public class Demo {
+
+	public static void main(String[] args) throws CloneNotSupportedException {
+		Student s1 = new Student("Bob", 11111, 3.0);
+		
+		Student s2 = new Student(s1);
+		
+		Student s3 = s1.shallowCopy();
+		
+		Student s4 = s1.deepCopy();
+		
+		System.out.println(s1 == s2);
+		System.out.println(s1.equals(s2));
+		
+		System.out.println(s1 == s3);
+		System.out.println(s1.equals(s3));
+		
+		System.out.println(s1 == s4);
+		System.out.println(s1.equals(s4));
+	}
+
+}
