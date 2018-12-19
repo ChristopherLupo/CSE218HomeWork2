@@ -1,0 +1,150 @@
+public class Student implements Cloneable{
+
+	@Override
+	public String toString() {
+		return "Student [name=" + name + ", id=" + id + ", gpa=" + gpa + "]";
+	}
+
+	private String name;
+	private int id;
+	private double gpa;
+
+	public Student(String name, int id, double gpa) {
+		super();
+		this.name = name;
+		this.id = id;
+		this.gpa = gpa;
+	}
+	
+	public Student(Student student) {
+		this.name = student.getName();
+		this.id = student.getId();
+		this.gpa = student.getGpa();
+	}
+	
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public double getGpa() {
+		return gpa;
+	}
+
+	public void setGpa(double gpa) {
+		this.gpa = gpa;
+	}
+
+	public Student deepCopy() throws CloneNotSupportedException{
+		Student deepClone = (Student) super.clone();
+		deepClone.name = name;
+		deepClone.id = id;
+		deepClone.gpa = gpa;
+		return deepClone;
+	}
+	
+	public Student shallowCopy() throws CloneNotSupportedException{
+		Student clone = (Student) super.clone();
+		
+		return clone;
+	}
+	
+	public boolean equals(Student student){
+		if(name.equals(student.getName())){
+			if(id == student.getId()){
+				if(gpa == student.getGpa()){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+}
+
+public class StudentBag {
+	private Student[] students;
+	private int nElems;
+
+	public StudentBag(int maxSize) {
+		students = new Student[maxSize];
+		nElems = 0;
+	}
+
+	public void add(Student student) {
+		students[nElems++] = student;
+	}
+
+	public void display() {
+		for (int i = 0; i < nElems; i++) {
+			System.out.println(students[i] + " ");
+		}
+	}
+	
+	public boolean remove(int value) {
+		boolean found = false;
+		for (int i = 0; i < nElems; i++) {
+			if(students[i].getId() == value){
+				found = true;
+				for(int j = i; j < nElems - 1; j++){
+					students[j] = students[j + 1];
+				}
+				nElems --;
+				return found;
+			}
+		}
+		return found;
+	}
+	
+	public boolean find(int value) {
+		boolean found = false;
+		for (int i = 0; i < nElems; i++) {
+			if(students[i].getId() == value){
+				found = true;
+			}
+		}
+		return found;
+	}
+	
+}
+
+public class Demo {
+
+	public static void main(String[] args) throws CloneNotSupportedException {
+		StudentBag bag = new StudentBag(1000);
+
+		Student s1 = new Student("Bob", 1, 3.2);
+
+		bag.add(s1);
+
+		for (int i = 1; i < 1000; i++) {
+			Student deep = s1.deepCopy();
+			deep.setId(deep.getId() + i);
+
+			bag.add(deep);
+		}
+
+		bag.display();
+
+		System.out.println(bag.find(999));
+		System.out.println(bag.remove(999));
+
+		System.out.println(bag.find(999));
+		System.out.println(bag.remove(999));
+
+		bag.display();
+
+	}
+
+}
